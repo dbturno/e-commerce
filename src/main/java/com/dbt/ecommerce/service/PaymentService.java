@@ -7,7 +7,9 @@ import com.dbt.ecommerce.model.Payment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 public interface PaymentService {
-    public Payment pay(Long cartId, Double paymentAmount);
+    public Payment savePayment(Payment payment);
+    public Payment pay(Long cartId, BigDecimal paymentAmount);
 }

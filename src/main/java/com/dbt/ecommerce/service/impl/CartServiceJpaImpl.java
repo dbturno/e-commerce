@@ -63,7 +63,8 @@ public class CartServiceJpaImpl implements CartService {
             if (cartItem.getProduct().getId().equals(productId)) {
                 log.debug("Same product found on cart, updating the price and quantity");
                 cartItem.setQuantity(cartItem.getQuantity() + quantity);
-                cartItem.setPrice(cartItem.getProduct().getPrice() * cartItem.getQuantity());
+                //cartItem.setPrice(cartItem.getProduct().getPrice() * cartItem.getQuantity());
+                cartItem.calculatePrice();
                 sameProductFound = true;
             }
         }
@@ -73,7 +74,8 @@ public class CartServiceJpaImpl implements CartService {
             CartItem cartItem = new CartItem();
             cartItem.setProduct(product);
             cartItem.setQuantity(quantity);
-            cartItem.setPrice(product.getPrice() * quantity);
+            //cartItem.setPrice(product.getPrice() * quantity);
+            cartItem.calculatePrice();
             cart.addItemToCart(cartItem);
         }
 
@@ -98,7 +100,8 @@ public class CartServiceJpaImpl implements CartService {
                     throw new IllegalStateException("Unable to remove more than the quantity inside the cart.");
                 } else if (cItem.getQuantity() > quantity){
                     cItem.setQuantity(cItem.getQuantity() - quantity);
-                    cItem.setPrice(cItem.getProduct().getPrice() * cItem.getQuantity());
+                    //cItem.setPrice(cItem.getProduct().getPrice() * cItem.getQuantity());
+                    cItem.calculatePrice();
                 } else {
                     cItemItr.remove();
                 }

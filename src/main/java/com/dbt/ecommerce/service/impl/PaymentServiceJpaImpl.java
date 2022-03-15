@@ -31,33 +31,34 @@ public class PaymentServiceJpaImpl implements PaymentService {
     PaymentRepository paymentRepository;
 
     @Override
-    public Payment pay(Long cartId, Double paymentAmount) {
-        Double totalAmount = 0.0;
-        Double changeAmount;
+    public Payment pay(Long cartId, BigDecimal paymentAmount) {
+        BigDecimal totalAmount = new BigDecimal(0);
+        BigDecimal changeAmount;
 
         Cart cart =  cartService.getCartById(cartId);
 
         List<CartItem> cartItemList = cart.getCartItems();
 
         for(CartItem cItem : cartItemList) {
-            totalAmount += cItem.getPrice();
+            totalAmount = totalAmount.add(cItem.getPrice());
+            //totalAmount += cItem.getPrice();
         }
 
-        if (paymentAmount < totalAmount) {
+        if (totalAmount.compareTo(paymentAmount) == 1) {
             throw new PaymentException("Insufficient Payment Amount");
         } else {
-            changeAmount = paymentAmount - totalAmount;
+            changeAmount = paymentAmount.subtract(totalAmount);
         }
 
-        return saveProduct(Payment.builder()
-                .amountPaid(BigDecimal.valueOf(paymentAmount))
+        return savePayment(Payment.builder()
+                .amountPaid(paymentAmount)
                 .paymentDate(LocalDateTime.now())
                 .cart(cart)
-                .totalAmount(BigDecimal.valueOf(totalAmount))
+                .totalAmount(totalAmount)
                 .build());
     }
 
-    public Payment saveProduct(Payment product) {
+    public Payment savePayment(Payment product) {
         return paymentRepository.save(product);
     }
 }

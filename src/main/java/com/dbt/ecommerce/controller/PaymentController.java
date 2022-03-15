@@ -5,6 +5,8 @@ import com.dbt.ecommerce.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("payment")
 public class PaymentController {
@@ -13,7 +15,7 @@ public class PaymentController {
     PaymentService paymentService;
 
     @PostMapping("/cart/{cartId}")
-    public Payment pay(@PathVariable("cartId") Long cartId, @RequestParam Double paymentAmount) {
+    public Payment pay(@PathVariable("cartId") Long cartId, @RequestParam BigDecimal paymentAmount) {
         return paymentService.pay(cartId, paymentAmount);
     }
 }
