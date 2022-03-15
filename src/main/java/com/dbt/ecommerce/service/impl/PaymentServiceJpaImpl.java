@@ -3,16 +3,21 @@ package com.dbt.ecommerce.service.impl;
 import com.dbt.ecommerce.exception.PaymentException;
 import com.dbt.ecommerce.model.Cart;
 import com.dbt.ecommerce.model.CartItem;
+import com.dbt.ecommerce.model.Payment;
+import com.dbt.ecommerce.model.Product;
+import com.dbt.ecommerce.repository.PaymentRepository;
 import com.dbt.ecommerce.service.CartService;
 import com.dbt.ecommerce.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Payment service implementation for
+ * Payment service implementation for JPA
  *
  */
 @Service
@@ -22,7 +27,11 @@ public class PaymentServiceJpaImpl implements PaymentService {
     @Autowired
     CartService cartService;
 
-    public Double pay(Long cartId, Double paymentAmount){
+    @Autowired
+    PaymentRepository paymentRepository;
+
+    @Override
+    public Payment pay(Long cartId, Double paymentAmount) {
         Double totalAmount = 0.0;
         Double changeAmount;
 
@@ -40,7 +49,15 @@ public class PaymentServiceJpaImpl implements PaymentService {
             changeAmount = paymentAmount - totalAmount;
         }
 
-        return changeAmount;
+        return saveProduct(Payment.builder()
+                .amountPaid(BigDecimal.valueOf(paymentAmount))
+                .paymentDate(LocalDateTime.now())
+                .cart(cart)
+                .totalAmount(BigDecimal.valueOf(totalAmount))
+                .build());
+    }
 
+    public Payment saveProduct(Payment product) {
+        return paymentRepository.save(product);
     }
 }
