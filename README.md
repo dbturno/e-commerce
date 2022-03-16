@@ -5,8 +5,7 @@ git clone https://github.com/dbturno/e-commerce.git
 
 ```
 
-### Endpoints available
-## Happy Path demo endpoints
+## Endpoints for happy path demo
 
 * Add products
   * POST /products
