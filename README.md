@@ -2,7 +2,7 @@
 
 ```
 git clone https://github.com/dbturno/e-commerce.git
-cd flights-service
+cd e-commerce
 ./mvnw package
 java -jar target/*.jar
 ```
