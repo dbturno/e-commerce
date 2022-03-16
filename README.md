@@ -2,14 +2,7 @@
 
 ```
 git clone https://github.com/dbturno/e-commerce.git
-cd e-commerce
-./mvnw package
-java -jar target/*.jar
-```
-Or Run directly using maven
 
-```
-./mvnw spring-boot:run
 ```
 
 ### Endpoints available
