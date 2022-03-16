@@ -4,6 +4,8 @@ import com.dbt.ecommerce.model.Cart;
 import com.dbt.ecommerce.repository.CartRepository;
 import com.dbt.ecommerce.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -13,6 +15,8 @@ import java.util.List;
 @RequestMapping("/carts")
 public class CartController {
 
+    //TODO: Associate carts to users.
+
     @Autowired
     CartRepository cartRepository;
 
@@ -20,29 +24,33 @@ public class CartController {
     CartService cartService;
 
     @PostMapping
-    public Cart saveCart(@RequestBody Cart cart) {
-        return cartService.saveCart(cart);
+    public ResponseEntity<Cart>saveCart(@RequestBody Cart cart) {
+        return new ResponseEntity<Cart>(cartService.saveCart(cart), HttpStatus.CREATED) ;
     }
 
     @GetMapping
-    public List<Cart> getCarts() {
-        return cartService.getAllCarts();
+    public ResponseEntity<List<Cart>> getCarts() {
+        return new ResponseEntity<List<Cart>>(cartService.getAllCarts(), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public Cart getCart(@PathVariable("id") Long id) {
-        return cartService.getCartById(id);
+    public ResponseEntity<Cart> getCart(@PathVariable("id") Long id) {
+        return new ResponseEntity<Cart>(cartService.getCartById(id),HttpStatus.OK);
     }
 
     @PostMapping("{cartId}/product/{productId}")
-    @Transactional
-    public Cart addItemsToCart(@PathVariable("cartId") Long cartId, @PathVariable("productId") Long productId, @RequestParam Integer quantity) {
-        return cartService.addItemsToCart(cartId, productId, quantity);
+    public ResponseEntity<Cart> addItemsToCart(@PathVariable("cartId") Long cartId, @PathVariable("productId") Long productId, @RequestParam Integer quantity) {
+        return new ResponseEntity<Cart>(cartService.addItemsToCart(cartId, productId, quantity), HttpStatus.OK);
     }
 
     @DeleteMapping("{cartId}/product/{productId}")
-    @Transactional
-    public Cart removeItemsFromCart(@PathVariable("cartId") Long cartId, @PathVariable("productId") Long productId, @RequestParam Integer quantity) {
-        return cartService.removeItemsFromCart(cartId, productId, quantity);
+    public ResponseEntity<Cart> removeItemsFromCart(@PathVariable("cartId") Long cartId, @PathVariable("productId") Long productId, @RequestParam Integer quantity) {
+        return new ResponseEntity<Cart>(cartService.removeItemsFromCart(cartId, productId, quantity), HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity deleteCart(@PathVariable("id") Long id) {
+        cartService.deleteCart(id);
+        return ResponseEntity.noContent().build();
     }
 }

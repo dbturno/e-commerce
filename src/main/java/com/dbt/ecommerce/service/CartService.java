@@ -25,4 +25,6 @@ public interface CartService {
 
     public Cart removeItemsFromCart(Long cartId, Long productId, Integer quantity);
 
+    public void deleteCart(Long id);
+
 }

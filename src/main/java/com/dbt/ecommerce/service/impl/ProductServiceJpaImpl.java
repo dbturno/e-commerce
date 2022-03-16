@@ -4,6 +4,7 @@ import com.dbt.ecommerce.exception.ProductNotFoundException;
 import com.dbt.ecommerce.model.Product;
 import com.dbt.ecommerce.repository.ProductRepository;
 import com.dbt.ecommerce.service.ProductService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.List;
  */
 @Service
 @Primary
+@Transactional
 public class ProductServiceJpaImpl implements ProductService {
 
     @Autowired
@@ -44,9 +46,8 @@ public class ProductServiceJpaImpl implements ProductService {
     public Product updateProduct(Product newProduct, Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product with id: "+ id + " not found."));
-        product.setName(newProduct.getName());
-        product.setPrice(newProduct.getPrice());
-        return productRepository.save(product);
+        BeanUtils.copyProperties(newProduct, product, "id");
+        return productRepository.saveAndFlush(product);
     }
 
     private ProductNotFoundException newEx(){

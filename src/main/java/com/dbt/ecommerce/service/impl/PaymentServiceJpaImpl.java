@@ -41,7 +41,6 @@ public class PaymentServiceJpaImpl implements PaymentService {
 
         for(CartItem cItem : cartItemList) {
             totalAmount = totalAmount.add(cItem.getPrice());
-            //totalAmount += cItem.getPrice();
         }
 
         if (totalAmount.compareTo(paymentAmount) == 1) {
@@ -49,6 +48,10 @@ public class PaymentServiceJpaImpl implements PaymentService {
         } else {
             changeAmount = paymentAmount.subtract(totalAmount);
         }
+
+        //TODO: Add inventory service
+        //TODO: Remove paid Item from cart, and update inventory
+
 
         return savePayment(Payment.builder()
                 .amountPaid(paymentAmount)
