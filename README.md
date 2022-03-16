@@ -9,8 +9,8 @@ git clone https://github.com/dbturno/e-commerce.git
 
 * Add products
   * POST /products
-* Delete products
-  * DELETE /products
+* Delete product
+  * DELETE /products/{productId}
 * List all/specific products
   * GET /products
   * GET /products/{productId}
@@ -18,7 +18,7 @@ git clone https://github.com/dbturno/e-commerce.git
   * POST /carts
 * Add item to cart
   * POST /carts/{cartId}/product/{productId}/?quantity={quantity}
-* Delete item to cart
+* Delete item from cart
   * DELETE /carts/{cartId}/product/{productId}/?quantity={quantity}
 * List all/specific carts
   * DELETE /carts
